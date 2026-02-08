@@ -34,6 +34,16 @@ useEffect(() => {
 useEffect(() => {
   localStorage.setItem("versions", JSON.stringify(versions));
 }, [versions]);
+function handleDeleteVersion(index: number) {
+  const updated = versions.filter((_, i) => i !== index);
+  setVersions(updated);
+}
+const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
+const sortedVersions = [...versions].sort((a, b) => {
+  if (sortOrder === "newest") return b.date.localeCompare(a.date);
+  return a.date.localeCompare(b.date);
+});
+
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow-md w-[500px]">
@@ -87,6 +97,22 @@ useEffect(() => {
 </div>
   </div>
 )}
+<div className="flex justify-between items-center mb-3">
+  <span className="text-sm text-gray-600">
+    Total: {versions.length}
+  </span>
+
+  <select
+    value={sortOrder}
+    onChange={(e) =>
+      setSortOrder(e.target.value as "newest" | "oldest")
+    }
+    className="border rounded px-2 py-1"
+  >
+    <option value="newest">Newest first</option>
+    <option value="oldest">Oldest first</option>
+  </select>
+</div>
 
 <div className="mt-10 w-full">
  <h2 className="text-xl font-bold text-gray-800 mb-4">
@@ -99,7 +125,7 @@ useEffect(() => {
   </div>
 ) : (
   <div className="space-y-3">
-    {versions.map((v, i) => (
+    {sortedVersions.map((v, i) => (
       <div
   key={i}
   className="border border-gray-300 rounded-lg p-4 bg-gray-50 shadow-sm hover:shadow-md transition"
@@ -109,7 +135,14 @@ useEffect(() => {
 </h3>
 
         <p className="text-gray-800">{v.notes}</p>
+
         <p className="text-sm text-gray-500">{v.date}</p>
+        <button
+  onClick={() => handleDeleteVersion(i)}
+  className="mt-3 text-sm text-red-600 hover:underline"
+>
+  Delete
+</button>
       </div>
     ))}
   </div>
