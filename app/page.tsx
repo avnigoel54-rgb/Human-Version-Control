@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 export default function Home() {
   const [showForm, setShowForm] = useState(false);
   const [versions, setVersions] = useState<
@@ -24,7 +24,16 @@ function handleAddVersion() {
   setNotes("");
   setShowForm(false);
 }
+useEffect(() => {
+  const saved = localStorage.getItem("versions");
 
+  if (saved) {
+    setVersions(JSON.parse(saved));
+  }
+}, []);
+useEffect(() => {
+  localStorage.setItem("versions", JSON.stringify(versions));
+}, [versions]);
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow-md w-[500px]">
