@@ -363,7 +363,7 @@ export default function Page() {
             />
 
             <textarea
-              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500 resize-none"
+              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500 resize-none placeholder:text-gray-500"
               placeholder="Notes"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
