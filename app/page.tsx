@@ -26,16 +26,8 @@ export default function Page() {
   // ======= STATES =======
   const [showForm, setShowForm] = useState(false);
   const [versions, setVersions] = useState<
-  {
-    name: string;
-    notes: string;
-    date: string;
-    tags: string[];
-    experiment: boolean;
-    emotion: number;
-  }[]
->([]);
-
+    { name: string; notes: string; date: string; tags: string[]; experiment: boolean }[]
+  >([]);
   const [versionName, setVersionName] = useState("");
   const [notes, setNotes] = useState("");
   const [tagsInput, setTagsInput] = useState("");
