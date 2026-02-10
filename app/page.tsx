@@ -352,7 +352,7 @@ export default function Page() {
             </h3>
 
             <input
-              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500 resize-none placeholder:text-gray-500 placeholder:font-medium text-gray-900 font-medium"
+              className="w-full border border-gray-300 p-3 rounded-xl mb-3 placeholder:text-gray-500 focus:ring-2 focus:ring-indigo-500 resize-none placeholder:text-gray-500 placeholder:font-medium text-gray-900 font-medium"
 
               placeholder="Version Name eg: V1.0"
               value={versionName}
@@ -360,8 +360,7 @@ export default function Page() {
             />
 
             <textarea
-              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500 resize-none placeholder:text-gray-500 placeholder:font-medium text-gray-900 font-medium"
-
+              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500 resize-none"
               placeholder="Notes"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
