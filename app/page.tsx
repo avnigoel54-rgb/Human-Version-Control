@@ -244,21 +244,21 @@ export default function Page() {
             </h3>
 
             <input
-              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-300 p-3 rounded-xl mb-3 placeholder:text-gray-500 focus:ring-2 focus:ring-indigo-500"
               placeholder="Version Name"
               value={versionName}
               onChange={(e) => setVersionName(e.target.value)}
             />
 
             <textarea
-              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500 resize-none"
+              className="w-full border border-gray-300 p-3 rounded-xl mb-3 placeholder:text-gray-500 focus:ring-2 focus:ring-indigo-500 resize-none"
               placeholder="Notes"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
             />
 
             <input
-              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-300 p-3 rounded-xl mb-3 placeholder:text-gray-500...... focus:ring-2 focus:ring-indigo-500"
               placeholder="Tags"
               value={tagsInput}
               onChange={(e) => setTagsInput(e.target.value)}
