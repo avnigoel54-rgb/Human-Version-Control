@@ -18,6 +18,142 @@ function StatCard({ title, value }: { title: string; value: number }) {
     </div>
   );
 }
+function TimelineCard({
+  version,
+  index,
+  onDelete,
+  onUpdate
+}: {
+  version: any;
+  index: number;
+  onDelete: (i: number) => void;
+  onUpdate: (v: any) => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(version);
+
+  return (
+    <div className="relative">
+
+      <div className="absolute -left-[43px] top-6 w-6 h-6 bg-indigo-500 rounded-full border-4 border-white shadow" />
+
+      <div className="bg-white rounded-2xl shadow p-6 border border-indigo-100">
+
+        {editing ? (
+          <div className="space-y-3">
+
+            <input
+              className="w-full border rounded-lg p-2"
+              value={draft.name}
+              onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+            />
+
+            <textarea
+              className="w-full border rounded-lg p-2 resize-none"
+              value={draft.notes}
+              onChange={(e) => setDraft({ ...draft, notes: e.target.value })}
+            />
+
+            <input
+              className="w-full border rounded-lg p-2"
+              value={draft.tags.join(", ")}
+              onChange={(e) =>
+                setDraft({
+                  ...draft,
+                  tags: e.target.value.split(",").map((t: string) => t.trim())
+                })
+              }
+            />
+
+            <div>
+              <label className="text-sm text-gray-600">
+                Emotion: {draft.emotion} / 5
+              </label>
+              <input
+                type="range"
+                min={1}
+                max={5}
+                value={draft.emotion}
+                onChange={(e) =>
+                  setDraft({ ...draft, emotion: Number(e.target.value) })
+                }
+                className="w-full accent-indigo-600"
+              />
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <button
+                onClick={() => {
+                  onUpdate(draft);
+                  setEditing(false);
+                }}
+                className="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:scale-105 transition"
+              >
+                Save
+              </button>
+
+              <button
+                onClick={() => {
+                  setDraft(version);
+                  setEditing(false);
+                }}
+                className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+
+          </div>
+        ) : (
+          <>
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-xl font-bold text-indigo-700">
+                  {version.name}
+                </h3>
+                <p className="text-sm text-gray-500">{version.date}</p>
+              </div>
+
+              <button
+                onClick={() => onDelete(index)}
+                className="text-red-500 hover:text-red-700 font-semibold"
+              >
+                Delete
+              </button>
+            </div>
+
+            <p className="mt-3 text-gray-700">{version.notes}</p>
+
+            <div className="flex flex-wrap gap-2 mt-3">
+              {version.tags.map((tag: string, idx: number) => (
+                <span
+                  key={idx}
+                  className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-medium"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-4 flex justify-between items-center">
+              <span className="text-sm text-gray-600">
+                Emotion: {version.emotion} / 5
+              </span>
+
+              <button
+                onClick={() => setEditing(true)}
+                className="text-indigo-600 hover:text-indigo-800 font-semibold"
+              >
+                Edit ✏️
+              </button>
+            </div>
+          </>
+        )}
+
+      </div>
+    </div>
+  );
+}
 
 export default function Page() {
   const [showForm, setShowForm] = useState(false);
@@ -110,67 +246,39 @@ export default function Page() {
 
         <section className="flex-1 p-6 overflow-y-auto">
           {activeTab === "timeline" && (
-  <div className="space-y-6">
+  <div className="space-y-10">
 
     <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">
-      Version Timeline ⏳
+      Life Version Timeline 📜
     </h2>
 
     {sortedVersions.length === 0 && (
       <p className="text-gray-500 italic">
-        No versions saved yet. Click "Add Version" to begin 🚀
+        No versions saved yet. Start journaling your growth ✨
       </p>
     )}
 
-    <div className="space-y-4">
+    <div className="relative border-l-4 border-indigo-200 pl-8 space-y-10">
+
       {sortedVersions.map((v, i) => (
-        <div
+        <TimelineCard
           key={i}
-          className="bg-white p-5 rounded-2xl shadow border border-indigo-100 hover:shadow-lg transition"
-        >
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="text-xl font-bold text-indigo-700">
-                {v.name}
-              </h3>
-              <p className="text-sm text-gray-500">{v.date}</p>
-            </div>
-
-            <button
-              onClick={() => handleDeleteVersion(i)}
-              className="text-red-500 hover:text-red-700 font-semibold"
-            >
-              Delete
-            </button>
-          </div>
-
-          <p className="mt-3 text-gray-700">{v.notes}</p>
-
-          <div className="flex flex-wrap gap-2 mt-3">
-            {v.tags.map((tag, idx) => (
-              <span
-                key={idx}
-                className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-medium"
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
-
-          <div className="mt-3 flex justify-between items-center text-sm text-gray-600">
-            <span>Emotion: {v.emotion} / 5</span>
-            {v.experiment && (
-              <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold">
-                Experiment 🔬
-              </span>
-            )}
-          </div>
-        </div>
+          index={i}
+          version={v}
+          onDelete={handleDeleteVersion}
+          onUpdate={(updated) => {
+            const copy = [...versions];
+            copy[i] = updated;
+            setVersions(copy);
+          }}
+        />
       ))}
+
     </div>
 
   </div>
 )}
+
 
           {activeTab === "analytics" && (
             <div className="space-y-8">
@@ -244,21 +352,24 @@ export default function Page() {
             </h3>
 
             <input
-              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500"
-              placeholder="Version Name"
+              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500 resize-none placeholder:text-gray-500 placeholder:font-medium text-gray-900 font-medium"
+
+              placeholder="Version Name eg: V1.0"
               value={versionName}
               onChange={(e) => setVersionName(e.target.value)}
             />
 
             <textarea
-              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500 resize-none"
+              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500 resize-none placeholder:text-gray-500 placeholder:font-medium text-gray-900 font-medium"
+
               placeholder="Notes"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
             />
 
             <input
-              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500 resize-none placeholder:text-gray-500 placeholder:font-medium text-gray-900 font-medium"
+
               placeholder="Tags"
               value={tagsInput}
               onChange={(e) => setTagsInput(e.target.value)}
