@@ -43,19 +43,22 @@ function TimelineCard({
           <div className="space-y-3">
 
             <input
-              className="w-full border rounded-lg p-2"
+              className="w-full border border-indigo-300 bg-white p-3 rounded-xl text-gray-900 font-semibold focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-gray-500"
+
               value={draft.name}
               onChange={(e) => setDraft({ ...draft, name: e.target.value })}
             />
 
             <textarea
-              className="w-full border rounded-lg p-2 resize-none"
+              className="w-full border border-indigo-300 bg-white p-3 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+
               value={draft.notes}
               onChange={(e) => setDraft({ ...draft, notes: e.target.value })}
             />
 
             <input
-              className="w-full border rounded-lg p-2"
+              className="w-full border border-indigo-300 bg-white p-3 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+
               value={draft.tags.join(", ")}
               onChange={(e) =>
                 setDraft({
