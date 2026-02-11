@@ -143,10 +143,10 @@ function TimelineCard({
                 Emotion: {version.emotion} / 5
               </span>
               <div className="mt-4 grid grid-cols-2 gap-2 text-sm text-gray-600">
-  <span>Confidence: {version.traits?.confidence ?? "-"}</span>
-  <span>Stress: {version.traits?.stress ?? "-"}</span>
-  <span>Energy: {version.traits?.energy ?? "-"}</span>
-  <span>Focus: {version.traits?.focus ?? "-"}</span>
+  <span>Confidence: {version.traits?.confidence ?? 5}</span>
+  <span>Stress: {version.traits?.stress ?? 5}</span>
+  <span>Energy: {version.traits?.energy ?? 5}</span>
+  <span>Focus: {version.traits?.focus ?? 5}</span>
 </div>
 
 
@@ -198,7 +198,7 @@ const [versionB, setVersionB] = useState<number | null>(null);
 
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [activeTab, setActiveTab] = useState<
-    "timeline" | "difference" | "analytics" | "insights"
+    "timeline" | "diff" | "analytics" | "insights"
   >("timeline");
 
   useEffect(() => {
@@ -271,7 +271,7 @@ setFocus(5);
             Navigation
           </h2>
           <ul className="space-y-3 text-indigo-900 font-medium">
-            {["timeline", "difference", "analytics", "insights"].map((tab) => (
+            {["timeline", "diff", "analytics", "insights"].map((tab) => (
               <li
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
@@ -322,58 +322,143 @@ setFocus(5);
   </div>
 )}
 
+<<<<<<< HEAD
 
-{activeTab === "difference" && (
+{activeTab === "diff" && (
   <div className="space-y-6">
-    <h2 className="text-3xl font-bold text-indigo-600">Different View 🔍</h2>
+    <h2 className="text-3xl font-bold text-indigo-600">Diff View 🔍</h2>
+=======
+{activeTab === "diff" && (
+  <div className="space-y-8">
+>>>>>>> c7c82118609a6832c33d3c1eccd2a7c3bd6951bb
 
-    <div className="flex gap-4">
-      <select
-        className="p-2 border rounded"
-        onChange={(e) => setVersionA(Number(e.target.value))}
-      >
-        <option>Select Version A</option>
-        {versions.map((v, i) => (
-          <option key={i} value={i}>{v.name}</option>
-        ))}
-      </select>
+    {/* Title */}
+    <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">
+      Diff View 🔍
+    </h2>
 
-      <select
-        className="p-2 border rounded"
-        onChange={(e) => setVersionB(Number(e.target.value))}
-      >
-        <option>Select Version B</option>
-        {versions.map((v, i) => (
-          <option key={i} value={i}>{v.name}</option>
-        ))}
-      </select>
+    {/* Selector Card */}
+    <div className="bg-white rounded-2xl shadow-xl border border-indigo-100 p-6 flex flex-col md:flex-row gap-6">
+
+      {/* Version A */}
+      <div className="flex-1">
+        <label className="text-sm font-semibold text-gray-700 mb-2 block">
+          Select Version A
+        </label>
+        <select
+          value={versionA ?? ""}
+          onChange={(e) =>
+            setVersionA(e.target.value === "" ? null : Number(e.target.value))
+          }
+          className="w-full p-3 rounded-xl border border-indigo-300 bg-white text-gray-800 font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+        >
+          <option value="" disabled hidden>
+            Choose version
+          </option>
+          {versions.map((v, i) => (
+            <option key={i} value={i} className="text-gray-800">
+              {v.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Version B */}
+      <div className="flex-1">
+        <label className="text-sm font-semibold text-gray-700 mb-2 block">
+          Select Version B
+        </label>
+        <select
+          value={versionB ?? ""}
+          onChange={(e) =>
+            setVersionB(e.target.value === "" ? null : Number(e.target.value))
+          }
+          className="w-full p-3 rounded-xl border border-pink-300 bg-white text-gray-800 font-medium focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+        >
+          <option value="" disabled hidden>
+            Choose version
+          </option>
+          {versions.map((v, i) => (
+            <option key={i} value={i} className="text-gray-800">
+              {v.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
     </div>
 
+    {/* Diff Result */}
     {versionA !== null && versionB !== null && (
-      <div className="bg-white p-6 rounded-xl shadow">
+      <div className="bg-white rounded-3xl shadow-2xl border border-indigo-100 p-8 space-y-6">
+
+        <h3 className="text-xl font-bold text-indigo-700">
+          Trait Comparison
+        </h3>
+
         {(["confidence", "stress", "energy", "focus"] as const).map((trait) => {
 
+<<<<<<< HEAD
           const a = versions[versionA]?.traits?.[trait] ?? 0;
           const b = versions[versionB]?.traits?.[trait] ?? 0;
-          const difference = b - a;
+          const diff = b - a;
 
           return (
             <div key={trait} className="flex justify-between border-b py-2">
               <span className="capitalize">{trait}</span>
               <span>{a} → {b}</span>
               <span className={
-                difference > 0 ? "text-green-500" :
-                difference < 0 ? "text-red-500" : ""
+                diff > 0 ? "text-green-500" :
+                diff < 0 ? "text-red-500" : ""
               }>
-                {difference > 0 ? "+" : ""}{difference}
+                {diff > 0 ? "+" : ""}{diff}
+=======
+          const a = versions[versionA]?.traits?.[trait] ?? 5;
+          const b = versions[versionB]?.traits?.[trait] ?? 5;
+          const diff = b - a;
+
+          return (
+            <div
+              key={trait}
+              className="flex items-center justify-between bg-gradient-to-r from-indigo-50 to-pink-50 p-4 rounded-2xl border border-indigo-100"
+            >
+              <span className="capitalize font-semibold text-gray-700 w-1/4">
+                {trait}
+              </span>
+
+              <span className="text-gray-600 w-1/4 text-center">
+                {a}
+              </span>
+
+              <span className="text-gray-400 w-1/4 text-center">
+                →
+              </span>
+
+              <span className="w-1/4 text-center font-bold">
+                <span className="text-gray-800">{b}</span>{" "}
+                <span
+                  className={
+                    diff > 0
+                      ? "text-green-600"
+                      : diff < 0
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  }
+                >
+                  ({diff > 0 ? "+" : ""}{diff})
+                </span>
+>>>>>>> c7c82118609a6832c33d3c1eccd2a7c3bd6951bb
               </span>
             </div>
           );
         })}
+
       </div>
     )}
+
   </div>
 )}
+
 
 
           {activeTab === "analytics" && (
@@ -491,6 +576,66 @@ setFocus(5);
                 className="w-full accent-indigo-600"
               />
             </div>
+            {/* Confidence */}
+<div className="mb-4">
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Confidence: {confidence} / 10
+  </label>
+  <input
+    type="range"
+    min={1}
+    max={10}
+    value={confidence}
+    onChange={(e) => setConfidence(Number(e.target.value))}
+    className="w-full accent-indigo-500"
+  />
+</div>
+
+{/* Stress */}
+<div className="mb-4">
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Stress: {stress} / 10
+  </label>
+  <input
+    type="range"
+    min={1}
+    max={10}
+    value={stress}
+    onChange={(e) => setStress(Number(e.target.value))}
+    className="w-full accent-red-500"
+  />
+</div>
+
+{/* Energy */}
+<div className="mb-4">
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Energy: {energy} / 10
+  </label>
+  <input
+    type="range"
+    min={1}
+    max={10}
+    value={energy}
+    onChange={(e) => setEnergy(Number(e.target.value))}
+    className="w-full accent-green-500"
+  />
+</div>
+
+{/* Focus */}
+<div className="mb-4">
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Focus: {focus} / 10
+  </label>
+  <input
+    type="range"
+    min={1}
+    max={10}
+    value={focus}
+    onChange={(e) => setFocus(Number(e.target.value))}
+    className="w-full accent-purple-500"
+  />
+</div>
+
 
             <div className="flex items-center gap-2 mb-4">
               <input
