@@ -198,7 +198,7 @@ const [versionB, setVersionB] = useState<number | null>(null);
 
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [activeTab, setActiveTab] = useState<
-    "timeline" | "diff" | "analytics" | "insights"
+    "timeline" | "difference" | "analytics" | "insights"
   >("timeline");
 
   useEffect(() => {
@@ -271,7 +271,7 @@ setFocus(5);
             Navigation
           </h2>
           <ul className="space-y-3 text-indigo-900 font-medium">
-            {["timeline", "diff", "analytics", "insights"].map((tab) => (
+            {["timeline", "difference", "analytics", "insights"].map((tab) => (
               <li
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
@@ -323,9 +323,9 @@ setFocus(5);
 )}
 
 
-{activeTab === "diff" && (
+{activeTab === "difference" && (
   <div className="space-y-6">
-    <h2 className="text-3xl font-bold text-indigo-600">Diff View 🔍</h2>
+    <h2 className="text-3xl font-bold text-indigo-600">Different View 🔍</h2>
 
     <div className="flex gap-4">
       <select
@@ -355,17 +355,17 @@ setFocus(5);
 
           const a = versions[versionA]?.traits?.[trait] ?? 0;
           const b = versions[versionB]?.traits?.[trait] ?? 0;
-          const diff = b - a;
+          const difference = b - a;
 
           return (
             <div key={trait} className="flex justify-between border-b py-2">
               <span className="capitalize">{trait}</span>
               <span>{a} → {b}</span>
               <span className={
-                diff > 0 ? "text-green-500" :
-                diff < 0 ? "text-red-500" : ""
+                difference > 0 ? "text-green-500" :
+                difference < 0 ? "text-red-500" : ""
               }>
-                {diff > 0 ? "+" : ""}{diff}
+                {difference > 0 ? "+" : ""}{difference}
               </span>
             </div>
           );
