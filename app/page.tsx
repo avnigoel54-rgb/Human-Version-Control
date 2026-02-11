@@ -16,8 +16,8 @@ function StatCard({ title, value }: { title: string; value: number }) {
       <p className="text-sm text-gray-500">{title}</p>
       <p className="text-3xl font-bold text-indigo-600">{value}</p>
     </div>
-  );
-}
+  ); 
+} 
 function TimelineCard({
   version,
   index,
