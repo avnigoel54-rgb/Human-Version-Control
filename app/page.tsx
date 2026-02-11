@@ -322,15 +322,8 @@ setFocus(5);
   </div>
 )}
 
-<<<<<<< HEAD
-
-{activeTab === "diff" && (
-  <div className="space-y-6">
-    <h2 className="text-3xl font-bold text-indigo-600">Diff View 🔍</h2>
-=======
 {activeTab === "diff" && (
   <div className="space-y-8">
->>>>>>> c7c82118609a6832c33d3c1eccd2a7c3bd6951bb
 
     {/* Title */}
     <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">
@@ -398,21 +391,6 @@ setFocus(5);
 
         {(["confidence", "stress", "energy", "focus"] as const).map((trait) => {
 
-<<<<<<< HEAD
-          const a = versions[versionA]?.traits?.[trait] ?? 0;
-          const b = versions[versionB]?.traits?.[trait] ?? 0;
-          const diff = b - a;
-
-          return (
-            <div key={trait} className="flex justify-between border-b py-2">
-              <span className="capitalize">{trait}</span>
-              <span>{a} → {b}</span>
-              <span className={
-                diff > 0 ? "text-green-500" :
-                diff < 0 ? "text-red-500" : ""
-              }>
-                {diff > 0 ? "+" : ""}{diff}
-=======
           const a = versions[versionA]?.traits?.[trait] ?? 5;
           const b = versions[versionB]?.traits?.[trait] ?? 5;
           const diff = b - a;
@@ -447,7 +425,6 @@ setFocus(5);
                 >
                   ({diff > 0 ? "+" : ""}{diff})
                 </span>
->>>>>>> c7c82118609a6832c33d3c1eccd2a7c3bd6951bb
               </span>
             </div>
           );
