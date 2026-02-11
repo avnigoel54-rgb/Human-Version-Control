@@ -142,6 +142,13 @@ function TimelineCard({
               <span className="text-sm text-gray-600">
                 Emotion: {version.emotion} / 5
               </span>
+              <div className="mt-4 grid grid-cols-2 gap-2 text-sm text-gray-600">
+  <span>Confidence: {version.traits?.confidence ?? "-"}</span>
+  <span>Stress: {version.traits?.stress ?? "-"}</span>
+  <span>Energy: {version.traits?.energy ?? "-"}</span>
+  <span>Focus: {version.traits?.focus ?? "-"}</span>
+</div>
+
 
               <button
                 onClick={() => setEditing(true)}
@@ -161,13 +168,34 @@ function TimelineCard({
 export default function Page() {
   const [showForm, setShowForm] = useState(false);
   const [versions, setVersions] = useState<
-    { name: string; notes: string; date: string; tags: string[]; experiment: boolean; emotion: number }[]
+    {
+  name: string;
+  notes: string;
+  date: string;
+  tags: string[];
+  experiment: boolean;
+  emotion: number;
+  traits: {
+    confidence: number;
+    stress: number;
+    energy: number;
+    focus: number;
+  };
+} []
   >([]);
   const [versionName, setVersionName] = useState("");
   const [notes, setNotes] = useState("");
   const [tagsInput, setTagsInput] = useState("");
   const [experimentChecked, setExperimentChecked] = useState(false);
   const [emotion, setEmotion] = useState(3);
+  const [confidence, setConfidence] = useState(5);
+const [stress, setStress] = useState(5);
+const [energy, setEnergy] = useState(5);
+const [focus, setFocus] = useState(5);
+const [versionA, setVersionA] = useState<number | null>(null);
+const [versionB, setVersionB] = useState<number | null>(null);
+
+
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [activeTab, setActiveTab] = useState<
     "timeline" | "diff" | "analytics" | "insights"
@@ -187,16 +215,28 @@ export default function Page() {
     setVersions([
       ...versions,
       {
-        name: versionName,
-        notes,
-        date: new Date().toLocaleDateString(),
-        tags: tagsInput.split(",").map((t) => t.trim()),
-        experiment: experimentChecked,
-        emotion,
-      },
+  name: versionName,
+  notes,
+  date: new Date().toLocaleDateString(),
+  tags: tagsInput.split(",").map((t) => t.trim()).filter(Boolean),
+  experiment: experimentChecked,
+  emotion,
+  traits: {
+    confidence,
+    stress,
+    energy,
+    focus,
+  },
+}
+
     ]);
     setVersionName("");
     setNotes("");
+    setConfidence(5);
+setStress(5);
+setEnergy(5);
+setFocus(5);
+
     setTagsInput("");
     setExperimentChecked(false);
     setEmotion(3);
@@ -279,6 +319,59 @@ export default function Page() {
 
     </div>
 
+  </div>
+)}
+
+
+{activeTab === "diff" && (
+  <div className="space-y-6">
+    <h2 className="text-3xl font-bold text-indigo-600">Diff View 🔍</h2>
+
+    <div className="flex gap-4">
+      <select
+        className="p-2 border rounded"
+        onChange={(e) => setVersionA(Number(e.target.value))}
+      >
+        <option>Select Version A</option>
+        {versions.map((v, i) => (
+          <option key={i} value={i}>{v.name}</option>
+        ))}
+      </select>
+
+      <select
+        className="p-2 border rounded"
+        onChange={(e) => setVersionB(Number(e.target.value))}
+      >
+        <option>Select Version B</option>
+        {versions.map((v, i) => (
+          <option key={i} value={i}>{v.name}</option>
+        ))}
+      </select>
+    </div>
+
+    {versionA !== null && versionB !== null && (
+      <div className="bg-white p-6 rounded-xl shadow">
+        {(["confidence", "stress", "energy", "focus"] as const).map((trait) => {
+
+          const a = versions[versionA]?.traits?.[trait] ?? 0;
+          const b = versions[versionB]?.traits?.[trait] ?? 0;
+          const diff = b - a;
+
+          return (
+            <div key={trait} className="flex justify-between border-b py-2">
+              <span className="capitalize">{trait}</span>
+              <span>{a} → {b}</span>
+              <span className={
+                diff > 0 ? "text-green-500" :
+                diff < 0 ? "text-red-500" : ""
+              }>
+                {diff > 0 ? "+" : ""}{diff}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    )}
   </div>
 )}
 
