@@ -319,27 +319,35 @@ export default function Page() {
               </div>
 
               {/* Emotion Heatmap */}
-              <div className="bg-gradient-to-br from-white to-pink-50 rounded-2xl p-6 shadow-lg border border-pink-100">
-                <h3 className="text-xl font-bold bg-gradient-to-r from-pink-500 to-orange-400 bg-clip-text text-transparent mb-4 flex items-center gap-2">
-                  Emotion Heatmap <span className="text-2xl">🧠</span>
-                </h3>
+              {/* Emotion Heatmap */}
+<div className="bg-gradient-to-br from-white to-pink-50 rounded-2xl p-6 shadow-lg border border-pink-100">
+  <h3 className="text-xl font-bold bg-gradient-to-r from-pink-500 to-orange-400 bg-clip-text text-transparent mb-4 flex items-center gap-2">
+    Emotion Heatmap <span className="text-2xl">🧠</span>
+  </h3>
 
-                <div className="grid grid-cols-6 gap-4 place-items-center">
-                  {versions.map((v, i) => (
-                    <div
-                      key={i}
-                      title={`${v.date} — Emotion: ${v.emotion}`}
-                      className={`w-10 h-10 rounded-xl shadow-md hover:scale-110 transition transform cursor-pointer ${
-                        v.emotion === 1 ? "bg-red-500" :
-                        v.emotion === 2 ? "bg-orange-400" :
-                        v.emotion === 3 ? "bg-yellow-400" :
-                        v.emotion === 4 ? "bg-green-400" :
-                        "bg-green-600"
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
+  <div className="grid grid-cols-7 gap-2">
+    {versions.map((v, i) => (
+      <div
+        key={i}
+        title={`${v.date} — Emotion: ${v.emotion}`}
+        className={`h-10 w-full rounded-lg transition transform hover:scale-105 ${
+          v.emotion === 1
+            ? "bg-gradient-to-br from-red-400 to-red-600"
+            : v.emotion === 2
+            ? "bg-gradient-to-br from-orange-300 to-orange-500"
+            : v.emotion === 3
+            ? "bg-gradient-to-br from-yellow-300 to-yellow-500"
+            : v.emotion === 4
+            ? "bg-gradient-to-br from-green-300 to-green-500"
+            : "bg-gradient-to-br from-emerald-400 to-emerald-600"
+        }`}
+      />
+    ))}
+  </div>
+
+  
+</div>
+
 
             </div>
           )}
