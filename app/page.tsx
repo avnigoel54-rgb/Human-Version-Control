@@ -319,7 +319,7 @@ setFocus(5);
             Navigation
           </h2>
           <ul className="space-y-3 text-indigo-900 font-medium">
-            {["timeline", "diff", "analytics", "insights"].map((tab) => (
+            {["timeline", "difference", "analytics", "insights"].map((tab) => (
               <li
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
@@ -349,7 +349,7 @@ setFocus(5);
     </h2>
 
     {sortedVersions.length === 0 && (
-      <p className="text-gray-500 italic">
+      <div className="text-gray-500 italic">
       <div className="bg-white p-8 rounded-2xl shadow border border-indigo-100 text-center">
   <p className="text-gray-500 italic mb-3">
     No versions saved yet.
@@ -359,7 +359,7 @@ setFocus(5);
   </p>
 </div>
 
-      </p>
+      </div>
     )}
 
     <div className="relative border-l-4 border-indigo-200 pl-8 space-y-10">
@@ -388,7 +388,7 @@ setFocus(5);
 
     {/* Title */}
     <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">
-      Diff View 🔍
+      Difference View 🔍
     </h2>
 
     {/* Selector Card */}
