@@ -118,7 +118,12 @@ function TimelineCard({
               </div>
 
               <button
-                onClick={() => onDelete(index)}
+                onClick={() => {
+  if (confirm("Are you sure you want to delete this version?")) {
+    onDelete(index);
+  }
+}}
+
                 className="text-red-500 hover:text-red-700 font-semibold"
               >
                 Delete
@@ -167,6 +172,7 @@ function TimelineCard({
 
 export default function Page() {
   const [showForm, setShowForm] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
   const [versions, setVersions] = useState<
     {
   name: string;
@@ -202,16 +208,34 @@ const [versionB, setVersionB] = useState<number | null>(null);
   >("timeline");
 
   useEffect(() => {
+  try {
     const saved = localStorage.getItem("versions");
-    if (saved) setVersions(JSON.parse(saved));
-  }, []);
+
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        setVersions(parsed);
+      } else {
+        setVersions([]);
+      }
+    }
+  } catch (error) {
+    console.error("Corrupted localStorage detected");
+    setVersions([]);
+  }
+}, []);
+
 
   useEffect(() => {
     localStorage.setItem("versions", JSON.stringify(versions));
   }, [versions]);
 
   function handleAddVersion() {
-    if (!versionName.trim()) return;
+    if (!versionName.trim()) {
+     alert("Version name cannot be empty.");
+     return;
+    }
+
     setVersions([
       ...versions,
       {
@@ -220,16 +244,23 @@ const [versionB, setVersionB] = useState<number | null>(null);
   date: new Date().toLocaleDateString(),
   tags: tagsInput.split(",").map((t) => t.trim()).filter(Boolean),
   experiment: experimentChecked,
-  emotion,
+  emotion: emotion ?? 3,
   traits: {
-    confidence,
-    stress,
-    energy,
-    focus,
+   confidence: confidence ?? 5,
+   stress: stress ?? 5,
+   energy: energy ?? 5,
+   focus: focus ?? 5,
   },
 }
 
     ]);
+    setMessage("Version saved successfully 🚀");
+
+    setTimeout(() => {
+    setMessage(null);
+    }, 2500);
+
+
     setVersionName("");
     setNotes("");
     setConfidence(5);
@@ -252,6 +283,23 @@ setFocus(5);
     if (sortOrder === "newest") return b.date.localeCompare(a.date);
     return a.date.localeCompare(b.date);
   });
+  const average = (key: "confidence" | "stress" | "energy" | "focus") => {
+  if (versions.length === 0) return 0;
+
+  const total = versions.reduce((sum, v) => {
+    return sum + (v.traits?.[key] ?? 5);
+  }, 0);
+
+  return Math.round(total / versions.length);
+};
+  const growth = (key: "confidence" | "stress" | "energy" | "focus") => {
+  if (versions.length < 2) return 0;
+
+  const first = versions[0]?.traits?.[key] ?? 5;
+  const last = versions[versions.length - 1]?.traits?.[key] ?? 5;
+
+  return last - first;
+};
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-pink-50 to-orange-50 flex flex-col">
@@ -286,6 +334,11 @@ setFocus(5);
             ))}
           </ul>
         </aside>
+        {message && (
+  <div className="absolute top-20 right-6 bg-green-500 text-white px-4 py-2 rounded-xl shadow-lg z-50">
+    {message}
+  </div>
+)}
 
         <section className="flex-1 p-6 overflow-y-auto">
           {activeTab === "timeline" && (
@@ -297,7 +350,15 @@ setFocus(5);
 
     {sortedVersions.length === 0 && (
       <p className="text-gray-500 italic">
-        No versions saved yet. Start journaling your growth ✨
+        <div className="bg-white p-8 rounded-2xl shadow border border-indigo-100 text-center">
+  <p className="text-gray-500 italic mb-3">
+    No versions saved yet.
+  </p>
+  <p className="text-indigo-600 font-medium">
+    Click "+ Add Version" to start tracking your growth 🚀
+  </p>
+</div>
+
       </p>
     )}
 
@@ -454,6 +515,11 @@ setFocus(5);
                 <StatCard title="Experiments" value={versions.filter(v => v.experiment).length} />
                 <StatCard title="Normal Builds" value={versions.filter(v => !v.experiment).length} />
                 <StatCard title="Unique Tags" value={new Set(versions.flatMap(v => v.tags)).size} />
+                  <StatCard title="Avg Confidence" value={average("confidence")} />
+                  <StatCard title="Avg Stress" value={average("stress")} />
+                  <StatCard title="Avg Energy" value={average("energy")} />
+                  <StatCard title="Avg Focus" value={average("focus")} />
+
               </div>
 
               {/* Emotional Trend */}
@@ -472,6 +538,25 @@ setFocus(5);
                   </LineChart>
                 </ResponsiveContainer>
               </div>
+              <div className="bg-white p-6 rounded-2xl shadow border border-indigo-100">
+  <h3 className="font-bold text-indigo-700 mb-2">
+    Growth Summary
+  </h3>
+
+  <p className="text-gray-700">
+    Confidence change: {growth("confidence")}
+  </p>
+  <p className="text-gray-700">
+    Stress change: {growth("stress")}
+  </p>
+  <p className="text-gray-700">
+    Energy change: {growth("energy")}
+  </p>
+  <p className="text-gray-700">
+    Focus change: {growth("focus")}
+  </p>
+</div>
+
 
               {/* Emotion Heatmap */}
               {/* Emotion Heatmap */}
@@ -526,7 +611,7 @@ setFocus(5);
             />
 
             <textarea
-              className="w-full border border-gray-300 p-3 rounded-xl mb-3 focus:ring-2 focus:ring-indigo-500 resize-none placeholder:text-gray-500"
+              className="w-full p-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-400 focus:outline-none text-gray-800 placeholder-gray-400"
               placeholder="Notes"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
