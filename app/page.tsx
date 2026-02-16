@@ -363,7 +363,7 @@ export default function Page() {
             Navigation
           </h2>
           <ul className="space-y-3 text-indigo-900 font-medium">
-            {["timeline", "difference", "analytics", "insights"].map((tab) => (
+            {["timeline", "diff", "analytics", "insights"].map((tab) => (
               <li
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
